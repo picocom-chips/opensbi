@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: BSD-2-Clause
+
+config PLATFORM_PICOCOM_PC805
+	bool
+	select FDT
+	select IRQCHIP_PLIC
+	select SERIAL_UART8250
+	default y
