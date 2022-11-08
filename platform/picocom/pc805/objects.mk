@@ -20,14 +20,16 @@ platform-ldflags-y =
 platform-objs-y += cache.o platform.o plmt.o
 
 PLATFORM_RISCV_XLEN = 32
-PLATFORM_RISCV_ABI = ilp32
-PLATFORM_RISCV_ISA = rv32ima
+PLATFORM_RISCV_ABI = ilp32d
+PLATFORM_RISCV_ISA = rv32gc
 PLATFORM_RISCV_CODE_MODEL = medany
 
 # Blobs to build
 FW_TEXT_START=0x80F00000
 
 FW_DYNAMIC=y
+
+FW_OPTIONS=0x02
 
 FW_JUMP=y
 FW_JUMP_ADDR=0x80000000
