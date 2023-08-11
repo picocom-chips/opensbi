@@ -24,6 +24,7 @@
 #include "platform.h"
 #include "plmt.h"
 #include "cache.h"
+#include "pma.h"
 
 static struct plic_data plic = {
 	.addr = PC805_PLIC_ADDR,
@@ -133,8 +134,26 @@ static int pc805_vendor_ext_provider(long extid, long funcid,
 	case SBI_EXT_ANDES_WRITE_AROUND:
 		ret = mcall_write_around(regs->a0);
 		break;
+
+    //A27 non-standard
+    case SBI_EXT_ANDES_READ_POWERBRAKE:
+        //*out_value = csr_read(CSR_MPFTCTL);
+        break;
+    case SBI_EXT_ANDES_WRITE_POWERBRAKE:
+        //csr_write(CSR_MPFTCTL, regs->a0);
+        break;
+    case SBI_EXT_ANDES_SET_PMA:
+        mcall_set_pma(regs->a0, regs->a1, regs->a2, regs->a3);
+        break;
+    case SBI_EXT_ANDES_FREE_PMA:
+        mcall_free_pma(regs->a0);
+        break;
+    case SBI_EXT_ANDES_PROBE_PMA:
+        *out_value = ((csr_read(CSR_MMSC_CFG) & 0x40000000) != 0);
+        break;
+
 	default:
-		sbi_printf("Unsupported vendor sbi call : %ld\n", funcid);
+		sbi_printf("Unsupported vendor sbi call : 0x%lx - %ld\n", extid, funcid);
 		asm volatile("ebreak");
 	}
 	return ret;

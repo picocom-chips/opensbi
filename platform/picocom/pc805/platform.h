@@ -20,11 +20,11 @@
 
 #define PC805_PLMT_ADDR			0x0c400000
 
-#define PC805_UART_ADDR			0x08210000
-#define PC805_UART_FREQUENCY		19660800
+#define PC805_UART_ADDR			0x08212000
+#define PC805_UART_FREQUENCY           325000000
 #define PC805_UART_BAUDRATE		115200
 #define PC805_UART_REG_SHIFT		2
-#define PC805_UART_REG_WIDTH		0
+#define PC805_UART_REG_WIDTH		4
 #define PC805_UART_REG_OFFSET		0
 
 /*Memory and Miscellaneous Registers*/
@@ -41,6 +41,13 @@
 #define CSR_UCCTLBEGINADDR	0x80c
 #define CSR_MMISCCTL		0x7d0
 
+/* Configuration Registers */
+#define CSR_MICM_CFG        0xfc0
+#define CSR_MDCM_CFG        0xfc1
+#define CSR_MMSC_CFG        0xfc2
+#define CSR_MMSC_CFG2       0xfc3
+#define CSR_MVEC_CFG        0xfc7
+
 enum sbi_ext_andes_fid {
 	SBI_EXT_ANDES_GET_MCACHE_CTL_STATUS = 0,
 	SBI_EXT_ANDES_GET_MMISC_CTL_STATUS,
@@ -52,6 +59,14 @@ enum sbi_ext_andes_fid {
 	SBI_EXT_ANDES_L1CACHE_D_PREFETCH,
 	SBI_EXT_ANDES_NON_BLOCKING_LOAD_STORE,
 	SBI_EXT_ANDES_WRITE_AROUND,
+
+    //A27 non-standard
+    SBI_EXT_ANDES_READ_POWERBRAKE = 12,
+    SBI_EXT_ANDES_WRITE_POWERBRAKE = 13,
+    SBI_EXT_ANDES_SET_PMA = 20,
+    SBI_EXT_ANDES_FREE_PMA = 21,
+    SBI_EXT_ANDES_PROBE_PMA = 22,
+    SBI_EXT_ANDES_DCACHE_WBINVAL_ALL = 23,
 };
 
 /* nds v5 mmisc_ctl register*/
