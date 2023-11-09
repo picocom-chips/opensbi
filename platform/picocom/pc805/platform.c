@@ -17,6 +17,7 @@
 #include <sbi/sbi_ipi.h>
 #include <sbi/sbi_platform.h>
 #include <sbi/sbi_trap.h>
+#include <sbi/sbi_domain.h>
 #include <sbi_utils/fdt/fdt_helper.h>
 #include <sbi_utils/fdt/fdt_fixup.h>
 #include <sbi_utils/irqchip/plic.h>
@@ -52,6 +53,21 @@ static int pc805_final_init(bool cold_boot)
 
 	fdt = fdt_get_address();
 	fdt_fixups(fdt);
+
+	return 0;
+}
+
+/* Initialize the platform domains. */
+static int pc805_domains_init(void)
+{
+	struct sbi_domain_memregion plat_region1;
+	struct sbi_domain_memregion plat_region2;
+
+	sbi_domain_memregion_init(PC805_BLANK_MEM0_ADDR, PC805_BLANK_MEM0_SIZE, SBI_DOMAIN_MEMREGION_MMODE, &plat_region1);
+	sbi_domain_root_add_memregion(&plat_region1);
+
+	sbi_domain_memregion_init(PC805_BLANK_MEM1_ADDR, PC805_BLANK_MEM1_SIZE, SBI_DOMAIN_MEMREGION_MMODE, &plat_region2);
+	sbi_domain_root_add_memregion(&plat_region2);
 
 	return 0;
 }
@@ -162,6 +178,8 @@ static int pc805_vendor_ext_provider(long extid, long funcid,
 /* Platform descriptor. */
 const struct sbi_platform_operations platform_ops = {
 	.final_init = pc805_final_init,
+
+	.domains_init = pc805_domains_init,
 
 	.console_init = pc805_console_init,
 
